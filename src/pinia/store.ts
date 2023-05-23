@@ -11,9 +11,8 @@ export function defineStore(idOrOptions: any, setup: any) {
     id = idOrOptions.id
     options = idOrOptions
   }
-
+  let store = reactive({})
   function createSetupStore(id, setup, pinia) {
-    let store = reactive({})
     let scope
     const { state, getters, actions } = options
     // pinia._e 是停止所有的监听 scope。stop是停止当前的监听
@@ -46,12 +45,12 @@ export function defineStore(idOrOptions: any, setup: any) {
 
   function createOptionsStore(id, options, pinia) {
     const { state, getters, actions } = options
-    let store = reactive({})
+
     function setup() {
       const localState = (pinia.state.value[id] = state ? state() : {})
-      store = Object.assign(store, localState, actions)
-      store = Object.assign(
-        store,
+      return Object.assign(
+        localState,
+        actions,
         Object.keys(getters || {}).reduce((memo, name) => {
           memo[name] = computed(() => {
             return getters[name].call(store, store)
@@ -59,7 +58,6 @@ export function defineStore(idOrOptions: any, setup: any) {
           return memo
         }, {})
       )
-      return store
     }
     createSetupStore(id, setup, pinia)
   }
