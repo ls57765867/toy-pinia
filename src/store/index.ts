@@ -1,5 +1,5 @@
 import { Names } from './store-name'
-import { defineStore } from 'pinia'
+import { defineStore } from '../pinia'
 
 interface StateInterface {
   name: string

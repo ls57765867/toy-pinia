@@ -1,5 +1,5 @@
 import { Names } from './store-name'
-import { defineStore } from 'pinia'
+import { defineStore } from '../pinia'
 
 export const useTest2Store = defineStore(Names.TEST2, () => {
   const state = reactive({
