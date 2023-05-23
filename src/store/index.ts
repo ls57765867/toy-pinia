@@ -15,8 +15,11 @@ export const useBaseStore = defineStore(Names.TEST, {
     doubleAge: ({ age }) => age * 2
   },
   actions: {
-    setName() {
-      this.name = this.name === '老四' ? '小三' : '老四'
+    setName(name) {
+      this.name = name
+    },
+    addAge(n = 1) {
+      this.age = this.age + n
     }
   }
 })

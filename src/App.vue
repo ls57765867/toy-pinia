@@ -16,24 +16,27 @@
 </template>
 
 <script setup lang="ts">
-import { useBaseStore } from './store'
+import { useBaseStore } from "./store";
 // import { storeToRefs } from 'pinia'
-import { useTest2Store } from './store/test2'
-const state = reactive({ test: 'test' })
-const store = useBaseStore()
-const testStore = useTest2Store()
+import { useTest2Store } from "./store/test2";
+
+const state = reactive({ test: "test" });
+const store = useBaseStore();
+const { setName } = store;
+const testStore = useTest2Store();
+console.log(testStore,33);
 // const { name, age, doubleAge } = storeToRefs(store)
 const editName = () => {
-  store.setName()
-}
+  setName("小刘" + Math.random());
+};
 const editAge = () => {
-  store.age.value++
-}
+  store.addAge(1)
+};
 
 const handleCilckButton = () => {
-  console.log(testStore)
-  testStore.editName()
-}
+  console.log(testStore);
+  testStore.editName();
+};
 </script>
 
 <style lang="scss" scoped></style>

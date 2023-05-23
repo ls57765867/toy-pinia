@@ -17,6 +17,7 @@ specifiers:
   eslint-plugin-vue: ^9.10.0
   node-sass: ^8.0.0
   pinia: ^2.0.33
+  pnpm: ^8.5.1
   postcss: ^8.4.21
   prettier: ^2.8.7
   sass: ^1.60.0
@@ -35,6 +36,7 @@ dependencies:
   '@vitejs/plugin-vue-jsx': 3.0.1_vite@4.2.1+vue@3.2.47
   element-plus: 2.3.1_vue@3.2.47
   pinia: 2.0.33_hmuptsblhheur2tugfgucj7gc4
+  pnpm: 8.5.1
   vue: 3.2.47
   vue-router: 4.1.6_vue@3.2.47
 
@@ -3474,6 +3476,12 @@ packages:
       mlly: 1.2.0
       pathe: 1.1.0
     dev: true
+
+  /pnpm/8.5.1:
+    resolution: {integrity: sha512-W6elL7Nww0a/MCICkzpkbxW6f99TQuX4DuJoDjWp39X08PKDkEpg4cgj3d6EtgYADcdQWl/eM8NdlLJVE3RgpA==}
+    engines: {node: '>=16.14'}
+    hasBin: true
+    dev: false
 
   /postcss-import/14.1.0_postcss@8.4.21:
     resolution: {integrity: sha512-flwI+Vgm4SElObFVPpTIT7SU7R3qk2L7PyduMcokiaVKuWv9d/U+Gm/QAd8NDLuykTWTkcrjOeD2Pp1rMeBTGw==}
