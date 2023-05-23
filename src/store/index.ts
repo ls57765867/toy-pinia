@@ -12,7 +12,10 @@ export const useBaseStore = defineStore(Names.TEST, {
   }),
   // getters中函数接受state参数，而actions中使用this
   getters: {
-    doubleAge: ({ age }) => age * 2
+    // doubleAge: ({ age }) => age * 2
+    doubleAge() {
+      return this.age * 2
+    }
   },
   actions: {
     setName(name) {

@@ -45,57 +45,23 @@ export function defineStore(idOrOptions: any, setup: any) {
   }
 
   function createOptionsStore(id, options, pinia) {
-    // 1.创建响应式
-    let store = reactive({})
-    let scope
     const { state, getters, actions } = options
-
+    let store = reactive({})
     function setup() {
       const localState = (pinia.state.value[id] = state ? state() : {})
-      return Object.assign(
-        localState,
-        actions,
+      store = Object.assign(store, localState, actions)
+      store = Object.assign(
+        store,
         Object.keys(getters || {}).reduce((memo, name) => {
           memo[name] = computed(() => {
-            // 支持以下两种getters模式
-            // getters: {
-            //     doubleAge() {
-            //       return this.age * 2
-            //     },
-            //     doubleAge: ({ age }) => age * 2
-            //   },
             return getters[name].call(store, store)
           })
           return memo
         }, {})
       )
+      return store
     }
-    // pinia._e 是停止所有的监听 scope。stop是停止当前的监听
-    const setupStore = pinia._e.run(() => {
-      scope = effectScope()
-      return scope.run(() => setup())
-    })
-    // 2.与state结合
-    // 3.与actions 融合
-    store = Object.assign(store, setupStore)
-
-    function warpAction(key, action) {
-      return function () {
-        let ret = action.apply(store, arguments)
-        // todo promise
-        return ret
-      }
-    }
-
-    for (let key in actions) {
-      let val = store[key]
-      if (typeof val === 'function') {
-        // 3.1修改actions的this指向
-        store[key] = warpAction(key, store[key])
-      }
-    }
-
-    pinia._s.set(id, store)
+    createSetupStore(id, setup, pinia)
   }
 
   const isSetupStore = typeof options === 'function'
