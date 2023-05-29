@@ -32,8 +32,8 @@ export function defineStore(idOrOptions: any, setup: any) {
       $subscribe: function (cb, options) {
         watch(
           () => pinia.state.value[id],
-          () => {
-            cb(store)
+          state => {
+            cb({ storeId: id }, state)
           },
           options
         )

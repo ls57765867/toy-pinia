@@ -49,8 +49,6 @@ store.$onAction(({ after, onError }) => {
   onError(e => {
     console.log(e, '错了')
   })
-  throw '嘿嘿'
-  console.log(onError, '开始')
 
   after(() => {
     console.log(store.name, '结束')
@@ -60,14 +58,15 @@ store.$onAction(({ after, onError }) => {
   })
 })
 
-// store.$subscribe(
-//   val => {
-//     console.log(val.name + '今年' + val.age)
-//   },
-//   {
-//     deep: true
-//   }
-// )
+store.$subscribe(
+  ({ storeId }, b) => {
+    console.log(storeId, b, 44)
+    // console.log(val.name + '今年' + val.age)
+  },
+  {
+    deep: true
+  }
+)
 
 const handleReset = () => [store.$reset()]
 </script>
