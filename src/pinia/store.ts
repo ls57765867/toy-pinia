@@ -1,5 +1,6 @@
 // 三种格式: id + options options id+setup
 import { piniaSymbol } from './createPinia'
+import { addSubscription, triggerSubscription } from './subscribe'
 
 export function defineStore(idOrOptions: any, setup: any) {
   let id: string
@@ -24,6 +25,8 @@ export function defineStore(idOrOptions: any, setup: any) {
         Object.assign(pinia.state.value[id], fnOrObj)
       }
     }
+    let subscriptionArray = [] as Array<() => void>
+
     const fn = {
       $patch: handlePatch,
       $subscribe: function (cb, options) {
@@ -34,6 +37,10 @@ export function defineStore(idOrOptions: any, setup: any) {
           },
           options
         )
+      },
+      // { after, onError }
+      $onAction(callback: ({ after, onError }: { after: any; onError: any }) => void) {
+        addSubscription(subscriptionArray, callback)
       }
     }
     if (!initialState && !isOption) {
@@ -51,7 +58,23 @@ export function defineStore(idOrOptions: any, setup: any) {
     }
     function warpAction(key, action) {
       return function () {
-        let ret = action.apply(store, arguments)
+        let subscriptionAfterArray = []
+        let subscriptionErrorArray = []
+        function after(callback) {
+          subscriptionAfterArray.push(callback)
+        }
+        function onError(callback) {
+          subscriptionErrorArray.push(callback)
+        }
+        let ret
+        try {
+          triggerSubscription(subscriptionArray, { after, onError })
+          ret = action.apply(store, arguments)
+          triggerSubscription(subscriptionAfterArray)
+        } catch (e) {
+          triggerSubscription(subscriptionErrorArray, e)
+        }
+
         // todo promise
         return ret
       }

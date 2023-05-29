@@ -41,20 +41,33 @@ const handleCilckButton = () => {
 }
 const handlePatch = () => {
   store.$patch(state => {
-    console.log(state)
     state.name = '啊实打实'
     state.age = 2222
   })
 }
+store.$onAction(({ after, onError }) => {
+  onError(e => {
+    console.log(e, '错了')
+  })
+  throw '嘿嘿'
+  console.log(onError, '开始')
 
-store.$subscribe(
-  val => {
-    console.log(val.name + '今年' + val.age)
-  },
-  {
-    deep: true
-  }
-)
+  after(() => {
+    console.log(store.name, '结束')
+  })
+  after(() => {
+    console.log(store.age, '年纪结束')
+  })
+})
+
+// store.$subscribe(
+//   val => {
+//     console.log(val.name + '今年' + val.age)
+//   },
+//   {
+//     deep: true
+//   }
+// )
 
 const handleReset = () => [store.$reset()]
 </script>
