@@ -1,5 +1,5 @@
 // 三种格式: id + options options id+setup
-import { piniaSymbol } from './createPinia'
+import { activePinia, piniaSymbol, setActivePinia } from './createPinia'
 import { addSubscription, triggerSubscription } from './subscribe'
 
 export function defineStore(idOrOptions: any, setup: any) {
@@ -28,12 +28,13 @@ export function defineStore(idOrOptions: any, setup: any) {
     let subscriptionArray = [] as Array<() => void>
 
     const fn = {
+      $id: id,
       $patch: handlePatch,
       $subscribe: function (cb, options) {
         watch(
           () => pinia.state.value[id],
-          () => {
-            cb(store)
+          state => {
+            cb({ storeId: id }, state)
           },
           options
         )
@@ -133,6 +134,10 @@ export function defineStore(idOrOptions: any, setup: any) {
   function useStore() {
     const instance = getCurrentInstance()
     let pinia = instance && inject(piniaSymbol)
+    if (!pinia) {
+      pinia = activePinia
+    }
+
     if (!pinia._s.has(id)) {
       if (isSetupStore) {
         createSetupStore(id, options, pinia, false)
@@ -141,6 +146,7 @@ export function defineStore(idOrOptions: any, setup: any) {
       }
     }
     const store = pinia._s.get(id) || {}
+    pinia._p.slice(0).forEach(plugin => plugin(store))
     return store
   }
 

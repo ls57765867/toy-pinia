@@ -22,6 +22,7 @@ import { useBaseStore } from './store'
 // import { storeToRefs } from 'pinia'
 import { useTest2Store } from './store/test2'
 
+
 const state = reactive({ test: 'test' })
 const store = useBaseStore()
 const { setName } = store
@@ -49,7 +50,6 @@ store.$onAction(({ after, onError }) => {
   onError(e => {
     console.log(e, '错了')
   })
-  throw '嘿嘿'
   console.log(onError, '开始')
 
   after(() => {
@@ -62,7 +62,6 @@ store.$onAction(({ after, onError }) => {
 
 // store.$subscribe(
 //   val => {
-//     console.log(val.name + '今年' + val.age)
 //   },
 //   {
 //     deep: true
