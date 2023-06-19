@@ -7,6 +7,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@antfu/ni": "^0.21.3",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
     "element-plus": "^2.3.1",
     "pinia": "^2.0.33",
